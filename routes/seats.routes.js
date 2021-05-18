@@ -17,17 +17,23 @@ router.route('/seats/:id').get((req, res) => {
 });
   
 router.route('/seats').post((req, res) => {
-  const obj = {
+  const seat = {
     id: uuidv4(),
     day: req.body.day,
     seat: req.body.seat,
     client: req.body.client,
     email: req.body.email
+  };
+
+  if(db.seats.some(booking => (booking.day == req.body.day && booking.seat == req.body.seat))) {
+    res.status(409).json({message: 'The seat is already taken!'});
   }
-  db.seats.push(obj);
-  return res.json({
-    message: 'OK'
-  });
+  else {
+    db.seats.push(seat);
+    return res.json({
+      message: 'OK'
+    });
+  }
 });
   
 router.route('/seats/:id').put((req, res) => {
