@@ -5,7 +5,8 @@
   "author": "Pawel Wisniewski <pawel_wisniewski@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "start": "npx nodemon server.js"
+    "start": "npx nodemon server.js",
+    "build": "cd client && yarn install && yarn build"
   },
   "dependencies": {
     "cors": "^2.8.5",
