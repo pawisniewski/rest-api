@@ -7,6 +7,8 @@ import './SeatChooser.scss';
 
 class SeatChooser extends React.Component {
 
+  seatsCount = 50;
+
   componentDidMount() {
     const { loadSeats, loadSeatsData } = this.props;
     loadSeats();
@@ -31,17 +33,19 @@ class SeatChooser extends React.Component {
 
   render() {
 
-    const { prepareSeat } = this;
-    const { requests } = this.props;
+    const { prepareSeat, seatsCount } = this;
+    const { requests, seats, chosenDay } = this.props;
+    const freeSeatsCount = seatsCount - seats.filter(seat => seat.day === chosenDay).length;
 
     return (
       <div>
         <h3>Pick a seat</h3>
         <small id="pickHelp" className="form-text text-muted ml-2"><Button color="secondary" /> – seat is already taken</small>
         <small id="pickHelpTwo" className="form-text text-muted ml-2 mb-4"><Button outline color="primary" /> – it's empty</small>
-        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">{[...Array(50)].map((x, i) => prepareSeat(i+1) )}</div>}
-        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].pending) && <Progress animated color="primary" value={50} /> }
+        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].success) && <div className="seats">{[...Array(this.seatsCount)].map((x, i) => prepareSeat(i+1) )}</div>}
+        { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].pending) && <Progress animated color="primary" value={this.seatsCount} /> }
         { (requests['LOAD_SEATS'] && requests['LOAD_SEATS'].error) && <Alert color="warning">Couldn't load seats...</Alert> }
+        <p className="free-seats">{`Free seats: ${freeSeatsCount}/${seatsCount}`}</p>
       </div>
     )
   };
