@@ -37,8 +37,9 @@ exports.put = async (req, res) => {
   try {
     const tes = await(Testimonial.findById(req.params.id));
     if(tes) {
-      await Testimonial.updateOne({ _id: req.params.id }, { $set: { author: author, text: text }});
-      res.json(tes);
+      Object.assign(tes, { author, text });
+      const newTes = await tes.save();
+      res.json(newTes);
     }
     else res.status(404).json({ message: 'Not found...' });
   }

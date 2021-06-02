@@ -37,8 +37,9 @@ exports.put = async (req, res) => {
   try {
     const con = await(Concert.findById(req.params.id));
     if(con) {
-      await Concert.updateOne({ _id: req.params.id }, { $set: { performer: performer, genre: genre, price: price, day: day, image: image }});
-      res.json(con);
+      Object.assign(con, { performer, genre, price, day, image });
+      const newCon = await con.save();
+      res.json(newCon);
     }
     else res.status(404).json({ message: 'Not found...' });
   }

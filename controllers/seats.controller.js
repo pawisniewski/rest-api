@@ -45,8 +45,9 @@ exports.put = async (req, res) => {
   try {
     const sea = await(Seat.findById(req.params.id));
     if(sea) {
-      await Seat.updateOne({ _id: req.params.id }, { $set: { day: day, seat: seat, client: client, email: email }});
-      res.json(sea);
+      Object.assign(sea, { day, seat, client, email });
+      const newSeat = await sea.save();
+      res.json(newSeat);
     }
     else res.status(404).json({ message: 'Not found...' });
   }
