@@ -13,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/client/build')));
 
@@ -36,7 +37,8 @@ app.use((req, res) => {
 });
 
 // connects our backend code with the database
-mongoose.connect('mongodb+srv://pawel_wisniewski:KYrpqNCsjo8rbUQU@cluster1.3rvv0.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true }, { useUnifiedTopology: true });
+const dbURI = process.env.NODE_ENV === 'test' ? 'mongodb://localhost:27017/NewWaveDBTest' : 'mongodb+srv://pawel_wisniewski:KYrpqNCsjo8rbUQU@cluster1.3rvv0.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+mongoose.connect(dbURI, { useNewUrlParser: true }, { useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
@@ -54,3 +56,5 @@ const io = socket(server);
 io.on('connection', socket => {
   console.log('New client: ', socket.id);
 });
+
+module.exports = server;
