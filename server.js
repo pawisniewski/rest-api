@@ -47,7 +47,7 @@ switch (process.env.NODE_ENV) {
     break;
   default:
     dbURI = 'mongodb://localhost:27017/NewWaveDB';
-}
+};
 
 mongoose.connect(dbURI, { useNewUrlParser: true }, { useUnifiedTopology: true });
 const db = mongoose.connection;
